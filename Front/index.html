@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Apply Pointilism and other Operations to Image</title>
+    <link href="style.css" rel="stylesheet">
+    
+  </head>
+  <body>
+    <h1>Title</h1>
+    <main>
+        <section>
+            <p >Some text explainig how it works</p>
+            <img src="images/trees.png" alt="Before Operation is Applied" id="before">
+            <img src="images/trees_pointilism.png" alt="After Pointilism Is Applied" id="after">
+        </section>
+    
+        <form action="/" method="post" enctype="multipart/form-data">
+            <label for="image">Please an Image</label>
+            <input type="file" name="image" id="image" accept="image">
+            <input type="radio" id="pointilism" name="operation" value="pointilism">
+            <label for="pointilism">Pointilism</label>
+            <input type="radio" id="other" name="operation" value="other">
+            <label for="other">Other</label>
+            <button type="submit" id="send_img">
+                <strong>submit</strong>
+            </button>
+        </form>
+    </main>
+    <div id="waiting">
+        <h1>Please Wait...</h1>
+    </div>
+    <div id="error">
+        <h1>Something Went Wrong...</h1>
+    </div>
+    <script defer src="main.js" ></script>
+  </body>
+</html>
