@@ -53,10 +53,14 @@ app.post('/send', upload.single('image'), (req, res)=>{
     if(curr_id === -1){
         res.status(400);
     }
+    // create a new directory every time user uploads a file
+    
+    // also instead of storyng arrays in the map, it's better to create a class or an object
     id_to_images.set(curr_id, [req.file.originalname, req.file.filename]);
     
     
     // modify the images in here
+    // use -strip when converting file types to get rid of comments in ppm file
     // temp stand in code
     fs.copyFile(`uploads/${id_to_images.get(curr_id)[1]}`, `uploads/after_${req.body.operation}${curr_id}.jpg`, (err)=>{
         if(err){
@@ -67,6 +71,7 @@ app.post('/send', upload.single('image'), (req, res)=>{
             console.log(id_to_images);
             res.status(200);
             res.sendFile(path.join(__dirname, `uploads/${id_to_images.get(curr_id)[2]}`));
+            // delete dir in sendFile callback function
             console.log("File sent");
             console.log(path.join(__dirname, `uploads/${id_to_images.get(curr_id)[2]}`));
         }

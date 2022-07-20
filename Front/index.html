@@ -17,12 +17,12 @@
     
         <form action="/send" method="post" enctype="multipart/form-data">
             <label for="image">Please an Image</label>
-            <input type="file" name="image" id="image" accept="image">
-            <input type="radio" id="pointilism" name="operation" value="pointilism">
+            <input type="file" name="image" id="image" accept="image" required>
+            <input type="radio" id="pointilism" name="operation" value="pointilism" required>
             <label for="pointilism">Pointilism</label>
             <input type="radio" id="other" name="operation" value="other">
             <label for="other">Other</label>
-            <input type="hidden" name="u_id" value ="-1" id="u_id">
+            
             <button type="submit" id="send_img">
                 <strong>submit</strong>
             </button>

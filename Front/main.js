@@ -1,5 +1,5 @@
 const form = document.querySelector('form');
-const button = document.querySelector('button');
+
 const inFile = document.querySelector('#image');
 const radio = document.getElementsByName("operation");
 // form submits and then we hide main and make a fetch request
