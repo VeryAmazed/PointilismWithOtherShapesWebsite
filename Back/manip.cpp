@@ -58,12 +58,16 @@ int main ( int argc, char *argv[] ){
 
 int readFile(){
 	ifstream in(fileName, ios::binary);
+	if(in.fail()){
+		return 1;
+	}
 	string format;
 	in >> format;
 	if(format != "P6"){
 		cout << format << endl;
 		return 1;
 	}
+	// we don't care about comments because we can use convert's -strip flag to remove them
 	in >> width;
 	in >> height;
 	in >> max_val;
@@ -73,9 +77,14 @@ int readFile(){
 		return 1;
 	}
 	vec.resize(width*height);
+	// Netpbm specifies that one white space character should follow after the max color value
 	in.get();
 	in.read((char*)&vec[0], vec.size() * 3);
-	
+	//should trigger eof flag
+	in.get();
+	if(!in.eof()){
+		return 1;
+	}
 	return 0;
 }
 
