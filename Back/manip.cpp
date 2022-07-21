@@ -27,9 +27,9 @@ struct pixel{
 	unsigned char r, g, b;
 };
 
-unsigned int height;
-unsigned int width;
-unsigned int max_val;
+int height;
+int width;
+int max_val;
 
 vector<pixel> vec;
 string fileName;
@@ -37,7 +37,11 @@ string operation;
 
 int readFile();
 int writeFile();
-
+void modify();
+void circle(int row, int col, int r);
+void rectangle(int row, int col, int r);
+void square(int row, int col, int r);
+void triangle(int row, int col, int r);
 
 int main ( int argc, char *argv[] ){
 	fileName = argv[1];
@@ -47,7 +51,7 @@ int main ( int argc, char *argv[] ){
 		return 1;
 	}
 	// use rand() like this, xyz = rand();
-	
+	modify();
 	if(writeFile()){
 		cout << 1 << endl;
 		return 1;
@@ -61,9 +65,10 @@ int readFile(){
 	if(in.fail()){
 		return 1;
 	}
-	string format;
+	string format = "";
 	in >> format;
 	if(format != "P6"){
+		cout << "here" << endl;
 		cout << format << endl;
 		return 1;
 	}
@@ -71,7 +76,10 @@ int readFile(){
 	in >> width;
 	in >> height;
 	in >> max_val;
-	cout << width << " " << height << " " << max_val << endl;
+	if(!in.good()){
+		return 1;
+	}
+	//cout << width << " " << height << " " << max_val << endl;
 	// I have never seen a ppm with max color value of 65355 even though it is stated they are supported on the Netpbm website
 	if(max_val > 255){
 		return 1;
@@ -99,4 +107,91 @@ int writeFile(){
 	out << max_val << endl;
 	out.write((char*)&vec[0], vec.size() * 3);
 	return 0;
+}
+
+void modify(){
+	int rad_range;
+	if(operation == "pointilism"){
+		rad_range = ceil(sqrt((double)min(width, height)/(double)600) * 5);
+	}else if(operation == "rectanglism"){
+		rad_range = ceil(sqrt((double)min(width, height)/(double)600) * 5);
+	}else if(operation == "squarism"){
+		rad_range = ceil(sqrt((double)min(width, height)/(double)1000) * 5);
+	}else if(operation == "trianglism"){
+		rad_range = ceil(sqrt((double)min(width, height)/(double)400) * 5);
+	}else{
+		return;
+	}
+	//cout << rad_range << endl;
+	for(int i = 0; i < (ll)(width*height*0.03); i++){
+		int col = rand()%width;
+		int row = rand()%height;
+		
+		int r = rand()%rad_range + 1;
+		if(operation == "pointilism"){
+			circle(row, col, r);
+		}else if(operation == "rectanglism"){
+			rectangle(row, col, r);
+		}else if(operation == "squarism"){
+			square(row, col, r);
+		}else if(operation == "trianglism"){
+			triangle(row, col, r);
+		}
+	}
+}
+
+void circle(int row, int col, int r){
+	for(int i = (row-r<0?0:row-r); i < (row+r+1 > height?height:row+r+1); i++){ // makes sure the random row exists, aka not negative and not greater than the number of rows in the ppm
+		for(int j = (col-r<0?0:col-r); j < (col+r+1 > width?width:col+r+1); j++){ // same as above except for columns
+			if((row-i)*(row-i) + (col-j)*(col-j) <= r*r){
+				vec[i*width+j].r = vec[row*width + col].r;
+				vec[i*width+j].g = vec[row*width + col].g;
+				vec[i*width+j].b = vec[row*width + col].b;
+			}
+		}
+   }
+}
+
+void rectangle(int row, int col, int r){
+	int r1 = r/3;
+	int r2 = r*2;
+	for(int i = (row-r1<0?0:row-r1); i < (row+r1+1 > height?height:row+r1+1); i++){ // makes sure the random row exists, aka not negative and not greater than the number of rows in the ppm
+		for(int j = (col-r2<0?0:col-r2); j < (col+r2+1 > width?width:col+r2+1); j++){ // same as above except for columns
+			
+			vec[i*width+j].r = vec[row*width + col].r;
+			vec[i*width+j].g = vec[row*width + col].g;
+			vec[i*width+j].b = vec[row*width + col].b;
+			
+		}
+   }
+}
+
+void square(int row, int col, int r){
+	for(int i = (row-r<0?0:row-r); i < (row+r+1 > height?height:row+r+1); i++){ // makes sure the random row exists, aka not negative and not greater than the number of rows in the ppm
+		for(int j = (col-r<0?0:col-r); j < (col+r+1 > width?width:col+r+1); j++){ // same as above except for columns
+		
+			vec[i*width+j].r = vec[row*width + col].r;
+			vec[i*width+j].g = vec[row*width + col].g;
+			vec[i*width+j].b = vec[row*width + col].b;
+			
+		}
+   }
+}
+
+void triangle(int row, int col, int r){
+	int counter = 0;
+	int sub = r;
+	for(int i = (row-r<0?0:row-r); i < (row+r+1 > height?height:row+r+1); i++){ // makes sure the random row exists, aka not negative and not greater than the number of rows in the ppm
+		for(int j = (col-r+sub<0?0:col-r+sub); j < (col+r+1-sub > width?width:col+r+1-sub); j++){ // same as above except for columns
+			
+			vec[i*width+j].r = vec[row*width + col].r;
+			vec[i*width+j].g = vec[row*width + col].g;
+			vec[i*width+j].b = vec[row*width + col].b;
+			
+		}
+		counter++;
+		if(counter % 2 == 0){
+			sub--;
+		}
+   }
 }
