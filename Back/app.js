@@ -12,16 +12,9 @@ app.use(express.json());
 //app.use(bodyParser.json());
 let id = 1;
 const id_to_images = new Map();
-/*
-app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname, '/../Front/index.html'));
 
-  });
-  */
+// use rate limiter to stop ddos stuff
 
-  // On first get request (on load), pass back an id to the user and store the image name and original name in a map corresponding to that id
-  // On first post store everything, override previous instance, on second post modify and send back files and delete them
-  // on window close (on unload) get rid of the id 
 app.use(express.static(path.join(__dirname, '/../Front')));
 
 app.get('/id', (req,res)=>{
@@ -48,8 +41,12 @@ app.get('/id', (req,res)=>{
 
 
 app.post('/send', upload.single('image'), (req, res)=>{
+    // don't trust user data, it can be modified using inspect element
+    // double check evrything here
     const curr_id = req.body.u_id;
     console.log(req.file, req.body);
+    // sanitize that their curr id actually exists, and that their operation is valid
+    // check the file size
     if(curr_id === -1){
         res.status(400);
     }
@@ -80,23 +77,6 @@ app.post('/send', upload.single('image'), (req, res)=>{
     
     
 });
-/*
-app.post('/retrieve', (req, res)=>{
-    console.log("recieved");
-    //const curr_id = req.body.u_id;
-    const curr_id = 1;
-    //console.log(req.body);
-    //console.log(curr_id);
-    console.log(id_to_images.get(curr_id));
-    if(id_to_images.get(curr_id).length !== 3){
-        console.log("bad");
-        res.status(400);
-    }else{
-        res.sendFile(path.join(__dirname, `uploads/${id_to_images.get(curr_id)[2]}`));
-    }
-    
-});
-*/
 
 app.listen(8080);
 
