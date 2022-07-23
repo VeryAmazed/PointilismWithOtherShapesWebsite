@@ -48,6 +48,8 @@ int main ( int argc, char *argv[] ){
 		cout << 1 << endl;
 		return 1;
 	}
+	// use rand() like this, xyz = rand();
+	
 	if(writeFile()){
 		cout << 1 << endl;
 		return 1;
