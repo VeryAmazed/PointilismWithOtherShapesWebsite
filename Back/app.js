@@ -45,8 +45,10 @@ app.post('/send', upload.single('image'), (req, res)=>{
     // double check evrything here
     const curr_id = req.body.u_id;
     console.log(req.file, req.body);
+    // check to make sure that the u_id exists
     // sanitize that their curr id actually exists, and that their operation is valid
     // check the file size
+    // check to make sure the radius value is a number
     if(curr_id === -1){
         res.status(400);
     }
