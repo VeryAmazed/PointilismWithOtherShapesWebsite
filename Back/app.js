@@ -2,12 +2,13 @@ const express = require('express');
 const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
-
+//const {Worker} = require('worker_threads');
 //const bodyParser = require('body-parser');
 
 
 const app = express();
 const upload = multer({dest: 'uploads/'});
+
 app.use(express.json());
 //app.use(bodyParser.json());
 let id = 1;
@@ -59,6 +60,34 @@ app.post('/send', upload.single('image'), (req, res)=>{
     
     // create unique directory
     // move the file in
+    // or don't delete and I'll use find-remove to clean stuff out every 30 minutes
+    fs.mkdir(`uploads/dir${curr_id}`, (err)=>{
+        if(err){
+            // delete file and delete id from map
+            res.status(400);
+        }
+        fs.copyFile(`uploads/${id_to_images.get(curr_id)[1]}`, `uploads/dir${curr_id}/${id_to_images.get(curr_id)[0]}`, (err)=>{
+            if(err){
+                // delete file, directory and id thingy from map
+                res.status(400);
+            }
+            fs.unlink(`uploads/${id_to_images.get(curr_id)[1]}`, (err)=>{
+                if(err){
+                    // delete directory and id thingy
+                    res.status(400);
+                }
+                //const worker = new Worker('worker.js', {id: curr_id, name: req.file.originalname, op: req.body.operation, rad: req.body.radius});
+                res.status(200);
+                res.sendFile(path.join(__dirname, `uploads/dir${curr_id}/${id_to_images.get(curr_id)[0]}`));
+            });
+        });
+    });
+        
+   
+   
+        
+    
+    
     // start the worker thread
     // rename the file
     // convert to ppm with arbitrary name with - strip // do it in 2 commands
@@ -68,6 +97,7 @@ app.post('/send', upload.single('image'), (req, res)=>{
     // otherwise check for the exit event i think
     // then send the file back and delete the directory
 
+    /*
     // modify the images in here
     // use -strip when converting file types to get rid of comments in ppm file
     // temp stand in code
@@ -86,7 +116,7 @@ app.post('/send', upload.single('image'), (req, res)=>{
         }
         
     });
-    
+    */
     
 });
 

@@ -32,6 +32,7 @@ form.addEventListener('submit', (e)=>{
             result = radio[i].value;
         }
     }
+    //check file size here
     const formData = new FormData();
     formData.append("image", inFile.files[0]);
     formData.append("operation", result);
@@ -56,23 +57,6 @@ form.addEventListener('submit', (e)=>{
         document.querySelector("#waiting").style.visibility = "hidden";
         document.querySelector("#after").src = imgUrl;
     });
-    //console.log(JSON.stringify({u_id: unique_id}));
-    /*
-    fetch('http://localhost:8080/retrieve', {
-        method: 'POST',
-        body: JSON.stringify({u_id: unique_id}),
-    }).then(resp =>{
-        console.log("resp?");
-        if(!resp.ok){
-            document.querySelector("#waiting").style.visibility = "hidden";
-            document.querySelector("#error").style.visibility = "visible";
-            throw new Error(`Http error! Status: ${resp.status}. Please make sure you submit a valid image file with proper dimensions`);
-        }
-        return resp.blob();
-    }).then(blob => {
-        const objectURL = URL.createObjectURL(blob);
-        document.querySelector('#after').src = objectURL;
-    });
-    */
+    
 });
 
