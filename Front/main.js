@@ -37,6 +37,7 @@ form.addEventListener('submit', (e)=>{
     formData.append("image", inFile.files[0]);
     formData.append("operation", result);
     formData.append("u_id", unique_id);
+    formData.append("radius", document.querySelector("#radius").value);
     fetch("http://localhost:8080/send", {
         method: "POST",
         body: formData,

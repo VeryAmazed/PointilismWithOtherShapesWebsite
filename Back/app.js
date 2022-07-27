@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
-//const {Worker} = require('worker_threads');
+const {Worker} = require('worker_threads');
 //const bodyParser = require('body-parser');
 
 
@@ -50,6 +50,7 @@ app.post('/send', upload.single('image'), (req, res)=>{
     // sanitize that their curr id actually exists, and that their operation is valid
     // check the file size
     // check to make sure the radius value is a number
+    // check if these values are undefined
     if(curr_id === -1){
         res.status(400);
     }
@@ -76,18 +77,24 @@ app.post('/send', upload.single('image'), (req, res)=>{
                     // delete directory and id thingy
                     res.status(400);
                 }
-                //const worker = new Worker('worker.js', {id: curr_id, name: req.file.originalname, op: req.body.operation, rad: req.body.radius});
-                res.status(200);
-                res.sendFile(path.join(__dirname, `uploads/dir${curr_id}/${id_to_images.get(curr_id)[0]}`));
+                const data = {id: curr_id, name: req.file.originalname, op: req.body.operation, rad: req.body.radius};
+                const worker = new Worker('./worker.js', {workerData: data});
+                worker.on('error', (err)=>{
+                    console.log("error occured in worker");
+                    console.log(err.message);
+                    res.status(400);
+                });
+                worker.on('exit', ()=>{
+                    res.status(200);
+                    console.log("we try to send a file");
+                    res.sendFile(path.join(__dirname, `uploads/dir${curr_id}/${req.body.operation}_${req.file.originalname}`));
+                    // delete stuff
+                })
+                
             });
         });
     });
-        
-   
-   
-        
-    
-    
+
     // start the worker thread
     // rename the file
     // convert to ppm with arbitrary name with - strip // do it in 2 commands

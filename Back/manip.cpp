@@ -29,6 +29,7 @@ int height;
 int width;
 int max_val;
 int user_rad_range;
+string user_id;
 vector<pixel> vec;
 string fileName;
 string operation;
@@ -42,22 +43,37 @@ void triangle(int row, int col, int r);
 void hexagon(int row, int col, int r);
 
 int main ( int argc, char *argv[] ){
+	cout << "hello stdout" << endl;
 	fileName = argv[1];
+	cout << "got here 1?" <<endl;
 	operation = argv[2];
+	
 	// sanity check user_rad_range to be an int, but also to not be too large
 	user_rad_range = stoi(argv[3], nullptr);
-	if(readFile()){
-		return 1;
+	user_id = argv[4];
+	cout << "do it get here, read all vars?" << endl;
+	try{
+		if(readFile()){
+			cout << "readFile 1 " << endl;
+			return 1;
+		}
+	}catch(...){
+		cout << "I guess file can't be read" << endl;
 	}
+	
 	// don't allow images with too many pixels, even if it's file size is under 4mb
 	if(width*height > 4000*4000){
+		cout << "here somehow" << endl;
 		return 1;
 	}
+	cout << "got here1" << endl;
 	modify();
+	cout << "got here2" << endl;
 	if(writeFile()){
-		
+		cout << "writeFile 1" << endl;
 		return 1;
 	}
+	cout << "sucess 0 "<< endl;
 	return 0;
 }
 // function to read in the ppm, 0 for success, 1 for failure
@@ -96,9 +112,11 @@ int readFile(){
 }
 
 int writeFile(){
-	string outFileName = operation + "_" + fileName;
+	string outFileName = "./uploads/dir" + user_id + "/after_" + operation +".ppm";
+	cout << outFileName << endl;
 	ofstream out(outFileName, ios::binary);
 	if(!out.is_open()){
+		cout << "couldn't open" << endl;
 		return 1;
 	}
 	out << "P6" << endl;
