@@ -57,7 +57,17 @@ app.post('/send', upload.single('image'), (req, res)=>{
     // also instead of storyng arrays in the map, it's better to create a class or an object
     id_to_images.set(curr_id, [req.file.originalname, req.file.filename]);
     
-    
+    // create unique directory
+    // move the file in
+    // start the worker thread
+    // rename the file
+    // convert to ppm with arbitrary name with - strip // do it in 2 commands
+    // run operation
+    // convert back to jpg with name operation_(filename).jpg
+    // if anything happens during this, just throw an error
+    // otherwise check for the exit event i think
+    // then send the file back and delete the directory
+
     // modify the images in here
     // use -strip when converting file types to get rid of comments in ppm file
     // temp stand in code
