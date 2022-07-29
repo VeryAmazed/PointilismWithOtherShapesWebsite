@@ -11,28 +11,30 @@ const upload = multer({dest: 'uploads/'});
 
 app.use(express.json());
 //app.use(bodyParser.json());
-let id = 1;
+let id = ['_', '0'];
 const idSet = new Set();
 
 // use rate limiter to stop ddos stuff
 
 app.use(express.static(path.join(__dirname, '/../Front')));
-// right now assigned ids are not unique, everyone is getting 1 for som reason
+// change the unique id to be a string of characters
 app.get('/id', (req,res)=>{
     console.log(idSet);
     
     //console.log(1<<30);
-    while(idSet.has(id)){
-        id++;
-        if(id > (1<<30)){
-            id = 1;
+    while(idSet.has(id.join(''))){
+        if(id[id.length-1] === '9'){
+            id[id.length-1] = 'a';
+        }else if(id[id.length-1] === 'z'){
+            id.push('0');
+        }else{
+            id[id.length - 1] = String.fromCharCode(id[id.length-1].charCodeAt(0)+1);
         }
+        console.log(id);
     }
-    idSet.add(id);
-    console.log(id);
-    res.send({value: id});
-    
-    //console.log("hello");
+    idSet.add(id.join(''));
+    console.log(id.join(''));
+    res.send({value: id.join('')});
 });
 
 
@@ -47,7 +49,8 @@ app.post('/send', upload.single('image'), (req, res)=>{
     // check to make sure the radius value is a number
     // check if these values are undefined
     
-    if(curr_id <= 0){
+    // maybe, if the id isn't in the set we just add it into the set
+    if(!idSet.has(curr_id)){
         res.status(400);
         return;
     }
@@ -104,6 +107,8 @@ app.post('/send', upload.single('image'), (req, res)=>{
     // then send the file back and delete the directory
     
 });
-// we do need a post to handle removing set elements
+
+// cleaning up, use nodes setInterval and find-remove to get rid of random files in uploads that linger around
+
 app.listen(8080);
 
