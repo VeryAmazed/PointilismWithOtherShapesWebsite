@@ -16,7 +16,7 @@ window.addEventListener('load', (e)=>{
         return resp.json();
     }).then(vals=>{
         unique_id = vals.value;
-        document.querySelector('#u_id').value = unique_id;
+        
         console.log(unique_id);
     });
     

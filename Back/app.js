@@ -12,30 +12,26 @@ const upload = multer({dest: 'uploads/'});
 app.use(express.json());
 //app.use(bodyParser.json());
 let id = 1;
-const id_to_images = new Map();
+const idSet = new Set();
 
 // use rate limiter to stop ddos stuff
 
 app.use(express.static(path.join(__dirname, '/../Front')));
-
+// right now assigned ids are not unique, everyone is getting 1 for som reason
 app.get('/id', (req,res)=>{
+    console.log(idSet);
     
-    let retry = false;
-    while(id_to_images.has(id)){
+    console.log(1<<30);
+    while(idSet.has(id)){
         id++;
-        if(id > (1<<50)){
+        if(id > (1<<30)){
             
-            if(retry){
-                res.status(400).end();
-                break;
-            }else{
-                id = 1;
-                retry = true;
-            }
-            
+            id = 1;
+                
         }
     }
-    
+    idSet.add(id);
+    console.log(id);
     res.send({value: id});
     
 });
@@ -56,23 +52,23 @@ app.post('/send', upload.single('image'), (req, res)=>{
     }
     // create a new directory every time user uploads a file
     
-    // also instead of storyng arrays in the map, it's better to create a class or an object
-    id_to_images.set(curr_id, [req.file.originalname, req.file.filename]);
     
     // create unique directory
     // move the file in
     // or don't delete and I'll use find-remove to clean stuff out every 30 minutes
     fs.mkdir(`uploads/dir${curr_id}`, (err)=>{
+        // error if it already exists
         if(err){
             // delete file and delete id from map
             res.status(400);
         }
-        fs.copyFile(`uploads/${id_to_images.get(curr_id)[1]}`, `uploads/dir${curr_id}/${id_to_images.get(curr_id)[0]}`, (err)=>{
+        fs.copyFile(`uploads/${req.file.filename}`, `uploads/dir${curr_id}/${req.file.originalname}`, (err)=>{
+            // overrides dest
             if(err){
                 // delete file, directory and id thingy from map
                 res.status(400);
             }
-            fs.unlink(`uploads/${id_to_images.get(curr_id)[1]}`, (err)=>{
+            fs.unlink(`uploads/${req.file.filename}`, (err)=>{
                 if(err){
                     // delete directory and id thingy
                     res.status(400);
@@ -126,6 +122,6 @@ app.post('/send', upload.single('image'), (req, res)=>{
     */
     
 });
-
+// we do need a post to handle removing set elements
 app.listen(8080);
 

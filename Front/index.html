@@ -16,8 +16,10 @@
         </section>
     
         <form action="/send" method="post" enctype="multipart/form-data">
+            <!--File upload -->>
             <label for="image">Please an Image</label>
             <input type="file" name="image" id="image" accept="image" required>
+            <!--Radio Buttons-->
             <input type="radio" id="pointilism" name="operation" value="pointilism" required>
             <label for="pointilism">Pointilism</label>
             <input type="radio" id="rectanglism" name="operation" value="rectanglism">
@@ -26,7 +28,8 @@
             <label for="hexagonism">Hexagonism</label>
             <input type="radio" id="trianglism" name="operation" value="trianglism">
             <label for="trianglism">Trianglism</label>
-            <input type="number" name="radius" id="radius" value="-1">
+            <input type="number" name="radius" id="radius" value="0">
+            <!--Optional Rad-->
             <label for="radius">Radius (optional)</label>
             <button type="submit" id="send_img">
                 <strong>submit</strong>
