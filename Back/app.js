@@ -21,19 +21,18 @@ app.use(express.static(path.join(__dirname, '/../Front')));
 app.get('/id', (req,res)=>{
     console.log(idSet);
     
-    console.log(1<<30);
+    //console.log(1<<30);
     while(idSet.has(id)){
         id++;
         if(id > (1<<30)){
-            
             id = 1;
-                
         }
     }
     idSet.add(id);
     console.log(id);
     res.send({value: id});
     
+    //console.log("hello");
 });
 
 
@@ -47,8 +46,10 @@ app.post('/send', upload.single('image'), (req, res)=>{
     // check the file size
     // check to make sure the radius value is a number
     // check if these values are undefined
-    if(curr_id === -1){
+    
+    if(curr_id <= 0){
         res.status(400);
+        return;
     }
     // create a new directory every time user uploads a file
     
@@ -56,7 +57,7 @@ app.post('/send', upload.single('image'), (req, res)=>{
     // create unique directory
     // move the file in
     // or don't delete and I'll use find-remove to clean stuff out every 30 minutes
-    fs.mkdir(`uploads/dir${curr_id}`, (err)=>{
+    fs.mkdir(`uploads/dir${curr_id}`, {recursive: true}, (err)=>{
         // error if it already exists
         if(err){
             // delete file and delete id from map
@@ -82,8 +83,10 @@ app.post('/send', upload.single('image'), (req, res)=>{
                 });
                 worker.on('exit', ()=>{
                     res.status(200);
-                    console.log("we try to send a file");
-                    res.sendFile(path.join(__dirname, `uploads/dir${curr_id}/${req.body.operation}_${req.file.originalname}`));
+                    //console.log("we try to send a file");
+                    res.sendFile(path.join(__dirname, `uploads/dir${curr_id}/${req.body.operation}_${req.file.originalname}`), (err)=>{
+                        fs.rmSync(`uploads/dir${curr_id}`, {force: true, recursive: true});
+                    });
                     // delete stuff
                 })
                 
@@ -99,27 +102,6 @@ app.post('/send', upload.single('image'), (req, res)=>{
     // if anything happens during this, just throw an error
     // otherwise check for the exit event i think
     // then send the file back and delete the directory
-
-    /*
-    // modify the images in here
-    // use -strip when converting file types to get rid of comments in ppm file
-    // temp stand in code
-    fs.copyFile(`uploads/${id_to_images.get(curr_id)[1]}`, `uploads/after_${req.body.operation}${curr_id}.jpg`, (err)=>{
-        if(err){
-            console.log(err);
-            res.status(400);
-        }else{
-            id_to_images.get(curr_id).push(`after_${req.body.operation}${curr_id}.jpg`);
-            console.log(id_to_images);
-            res.status(200);
-            res.sendFile(path.join(__dirname, `uploads/${id_to_images.get(curr_id)[2]}`));
-            // delete dir in sendFile callback function
-            console.log("File sent");
-            console.log(path.join(__dirname, `uploads/${id_to_images.get(curr_id)[2]}`));
-        }
-        
-    });
-    */
     
 });
 // we do need a post to handle removing set elements

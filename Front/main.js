@@ -16,7 +16,6 @@ window.addEventListener('load', (e)=>{
         return resp.json();
     }).then(vals=>{
         unique_id = vals.value;
-        
         console.log(unique_id);
     });
     
@@ -42,7 +41,7 @@ form.addEventListener('submit', (e)=>{
         method: "POST",
         body: formData,
     }).then((resp)=>{
-        console.log("made it here1");
+        //console.log("made it here1");
         
         if(!resp.ok){
             throw new Error(`HTTP error! Status: ${ response.status }`);
