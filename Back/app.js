@@ -12,29 +12,26 @@ const upload = multer({dest: 'uploads/'});
 app.use(express.json());
 //app.use(bodyParser.json());
 let id = ['_', '0'];
-const idSet = new Set();
+const key = 'we1x*596d';
+
 
 // use rate limiter to stop ddos stuff
 
 app.use(express.static(path.join(__dirname, '/../Front')));
 // change the unique id to be a string of characters
 app.get('/id', (req,res)=>{
-    console.log(idSet);
     
-    //console.log(1<<30);
-    while(idSet.has(id.join(''))){
-        if(id[id.length-1] === '9'){
-            id[id.length-1] = 'a';
-        }else if(id[id.length-1] === 'z'){
-            id.push('0');
-        }else{
-            id[id.length - 1] = String.fromCharCode(id[id.length-1].charCodeAt(0)+1);
-        }
-        console.log(id);
+    if(id[id.length-1] === '9'){
+        id[id.length-1] = 'a';
+    }else if(id[id.length-1] === 'z'){
+        id.push('0');
+    }else{
+        id[id.length - 1] = String.fromCharCode(id[id.length-1].charCodeAt(0)+1);
     }
-    idSet.add(id.join(''));
-    console.log(id.join(''));
-    res.send({value: id.join('')});
+    console.log(id);
+    
+    console.log((id.join('')+key));
+    res.send({value: (id.join('')+key)});
 });
 
 
@@ -50,7 +47,7 @@ app.post('/send', upload.single('image'), (req, res)=>{
     // check if these values are undefined
     
     // maybe, if the id isn't in the set we just add it into the set
-    if(!idSet.has(curr_id)){
+    if(!curr_id.endsWith(key)){
         res.status(400);
         return;
     }
