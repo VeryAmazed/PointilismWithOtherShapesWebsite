@@ -3,7 +3,8 @@ const form = document.querySelector('form');
 const inFile = document.querySelector('#image');
 const radio = document.getElementsByName("operation");
 // form submits and then we hide main and make a fetch request
-let unique_id = -1;
+let unique_id;
+let img_url = null;
 
 window.addEventListener('load', (e)=>{
     
@@ -54,10 +55,18 @@ form.addEventListener('submit', (e)=>{
     }).then(resp =>{
         console.log("made it here2");
         console.log(resp);
-        const imgUrl =  URL.createObjectURL(resp);
+        //console.log(img_url !== null);
+        //console.log(img_url);
+        if(img_url !== null){
+            URL.revokeObjectURL(img_url);
+            console.log(img_url);
+        }
+        
+        img_url =  URL.createObjectURL(resp);
+        //console.log(img_url);
         document.querySelector('main').style.visibility = "visible";
         document.querySelector("#waiting").style.visibility = "hidden";
-        document.querySelector("#after").src = imgUrl;
+        document.querySelector("#after").src = img_url;
     });
     
 });
