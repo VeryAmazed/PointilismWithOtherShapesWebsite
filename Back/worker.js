@@ -26,7 +26,7 @@ exec(`convert ${path.join(__dirname, `/uploads/dir${data.id}/${data.name}`)} -st
             console.log("cb 2");
             //console.log(stdout);
             //console.log(stderr);
-            console.log(err.code);
+            //console.log(err.code);
             console.log(err.message);
             throw new Error(err.message);
         }

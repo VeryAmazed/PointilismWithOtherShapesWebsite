@@ -11,14 +11,14 @@ const upload = multer({dest: 'uploads/'});
 
 app.use(express.json());
 //app.use(bodyParser.json());
-let id = ['_', '0'];
-const key = 'we1x*596d';
+let id = ['0'];
+const key = 'we1x*59';
 
 
 // use rate limiter to stop ddos stuff
 
 app.use(express.static(path.join(__dirname, '/../Front')));
-// change the unique id to be a string of characters
+
 app.get('/id', (req,res)=>{
     
     if(id[id.length-1] === '9'){
@@ -35,7 +35,17 @@ app.get('/id', (req,res)=>{
 });
 
 
-app.post('/send', upload.single('image'), (req, res)=>{
+app.post('/send', upload.single('image'), (req, res, next)=>{
+    let originalname = [];
+    for(let i = 0; i < req.file.originalname.length; i++){
+        if(req.file.originalname.charCodeAt(i) === 32){
+            originalname.push('_');
+        }else{
+            originalname.push((req.file.originalname)[i]);
+        }
+    }
+    const originalname_str = originalname.join('');
+    console.log(originalname_str);
     // don't trust user data, it can be modified using inspect element
     // double check evrything here
     const curr_id = req.body.u_id;
@@ -48,52 +58,57 @@ app.post('/send', upload.single('image'), (req, res)=>{
     
     // maybe, if the id isn't in the set we just add it into the set
     if(!curr_id.endsWith(key)){
-        res.status(400);
+        const err = new Error("Invalid ID");
+        next(err);
         return;
     }
-    // create a new directory every time user uploads a file
     
-    
-    // create unique directory
-    // move the file in
     // or don't delete and I'll use find-remove to clean stuff out every 30 minutes
     fs.mkdir(`uploads/dir${curr_id}`, {recursive: true}, (err)=>{
         // error if it already exists
         if(err){
-            // delete file and delete id from map
-            res.status(400);
+            next(err);
+            
         }
-        fs.copyFile(`uploads/${req.file.filename}`, `uploads/dir${curr_id}/${req.file.originalname}`, (err)=>{
+        fs.copyFile(`uploads/${req.file.filename}`, `uploads/dir${curr_id}/${originalname_str}`, (err)=>{
             // overrides dest
             if(err){
-                // delete file, directory and id thingy from map
-                res.status(400);
+                next(err);
+                
             }
             fs.unlink(`uploads/${req.file.filename}`, (err)=>{
                 if(err){
-                    // delete directory and id thingy
-                    res.status(400);
+                    next(err);
+                    
                 }
-                const data = {id: curr_id, name: req.file.originalname, op: req.body.operation, rad: req.body.radius};
+                const data = {id: curr_id, name: originalname_str, op: req.body.operation, rad: req.body.radius};
                 const worker = new Worker('./worker.js', {workerData: data});
                 worker.on('error', (err)=>{
                     console.log("error occured in worker");
                     console.log(err.message);
-                    res.status(400);
+                    next(err);
+                    //console.log(res.statusCode);
+                    
                 });
                 worker.on('exit', ()=>{
                     res.status(200);
                     //console.log("we try to send a file");
-                    res.sendFile(path.join(__dirname, `uploads/dir${curr_id}/${req.body.operation}_${req.file.originalname}`), (err)=>{
-                        fs.rmSync(`uploads/dir${curr_id}`, {force: true, recursive: true});
+                    res.sendFile(path.join(__dirname, `uploads/dir${curr_id}/${req.body.operation}_${originalname_str}`), (err)=>{
+                        // add a try catch here
+                        try{
+                            fs.rmSync(`uploads/dir${curr_id}`, {force: true, recursive: true});
+                        }catch(err){
+                            next(err);
+                        }
                     });
-                    // delete stuff
+                    
                 })
                 
             });
         });
     });
-
+    // create unique directory
+    // move the file in
     // start the worker thread
     // rename the file
     // convert to ppm with arbitrary name with - strip // do it in 2 commands

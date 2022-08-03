@@ -44,6 +44,8 @@ form.addEventListener('submit', (e)=>{
         //console.log("made it here1");
         
         if(!resp.ok){
+            document.querySelector("#waiting").style.visibility = "hidden";
+            document.querySelector("#error").style.visibility = "visible";
             throw new Error(`HTTP error! Status: ${ response.status }`);
         }
         
