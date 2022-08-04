@@ -22,6 +22,13 @@ window.addEventListener('load', (e)=>{
     
 });
 
+inFile.addEventListener("change", (e)=>{
+    if(inFile.files[0].size > 4194304){
+        alert("File is too large");
+        inFile.value = "";
+    }
+});
+
 form.addEventListener('submit', (e)=>{
    e.preventDefault();
     document.querySelector('main').style.visibility = "hidden";

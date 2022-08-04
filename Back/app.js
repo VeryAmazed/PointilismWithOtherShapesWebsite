@@ -44,21 +44,16 @@ app.post('/send', upload.single('image'), (req, res, next)=>{
             isValidOp = true;
         }
     }
-    /*
-    if(req.file.radius === undefined){
-        const err = new Error("Radius is undefined");
-        next(err);
-        return;
-    }
-    */
+
     const parsed = parseInt(req.body.radius, 10);
     console.log(parsed);
+    //express error handling handles the case where any of these fields is undefined, including when the file is undefined
     if(!curr_id.endsWith(key)){
         const err = new Error("Invalid ID");
         next(err);
         return;
         
-    }else if(req.file.size > 4000000){
+    }else if(req.file.size > 4194304){ // 4 * 2^20, 4mb
         const err = new Error("File size too large");
         next(err);
         return;
