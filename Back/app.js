@@ -8,7 +8,10 @@ const {Worker} = require('worker_threads');
 
 const app = express();
 const upload = multer({dest: 'uploads/'});
+const findRemoveSync = require('find-remove');
 
+// setInterval takes a callback so we use .bind() to return a function while being able to give it the desired arguments
+setInterval(findRemoveSync.bind(this, path.join(__dirname, '/uploads'), {dir: '*', files: ['*.*', '*'], age: {seconds: 1800}}), 1800000);
 app.use(express.json());
 //app.use(bodyParser.json());
 let id = ['0'];

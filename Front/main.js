@@ -24,7 +24,7 @@ window.addEventListener('load', (e)=>{
 
 inFile.addEventListener("change", (e)=>{
     if(inFile.files[0].size > 4194304){
-        alert("File is too large");
+        alert("File is too large. Max size is 4mb.");
         inFile.value = "";
     }
 });
