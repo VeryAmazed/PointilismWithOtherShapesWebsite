@@ -13,7 +13,7 @@ app.use(express.json());
 //app.use(bodyParser.json());
 let id = ['0'];
 const key = 'we1x*59';
-
+const valid_operations = ["pointilism", "rectanglism", "trianglism", "hexagonism"];
 
 // use rate limiter to stop ddos stuff
 
@@ -36,6 +36,42 @@ app.get('/id', (req,res)=>{
 
 
 app.post('/send', upload.single('image'), (req, res, next)=>{
+    const curr_id = req.body.u_id;
+    console.log(req.file, req.body);
+    let isValidOp = false;
+    for(let i = 0; i < valid_operations.length; i++){
+        if(req.body.operation === valid_operations[i]){
+            isValidOp = true;
+        }
+    }
+    /*
+    if(req.file.radius === undefined){
+        const err = new Error("Radius is undefined");
+        next(err);
+        return;
+    }
+    */
+    const parsed = parseInt(req.body.radius, 10);
+    console.log(parsed);
+    if(!curr_id.endsWith(key)){
+        const err = new Error("Invalid ID");
+        next(err);
+        return;
+        
+    }else if(req.file.size > 4000000){
+        const err = new Error("File size too large");
+        next(err);
+        return;
+    }else if(!isValidOp){
+        const err = new Error("Not a supported operation");
+        next(err);
+        return;
+    }else if(isNaN(parsed) || parsed < 0 || parsed > (1<<29)){
+        const err = new Error("Radius is not valid");
+        next(err);
+        return;
+    }
+
     let originalname = [];
     for(let i = 0; i < req.file.originalname.length; i++){
         if(req.file.originalname.charCodeAt(i) === 32){
@@ -48,37 +84,35 @@ app.post('/send', upload.single('image'), (req, res, next)=>{
     console.log(originalname_str);
     // don't trust user data, it can be modified using inspect element
     // double check evrything here
-    const curr_id = req.body.u_id;
-    console.log(req.file, req.body);
+    
+    
     // check to make sure that the u_id exists
     // sanitize that their curr id actually exists, and that their operation is valid
     // check the file size
     // check to make sure the radius value is a number
     // check if these values are undefined
     
-    // maybe, if the id isn't in the set we just add it into the set
-    if(!curr_id.endsWith(key)){
-        const err = new Error("Invalid ID");
-        next(err);
-        return;
-    }
+   
     
     // or don't delete and I'll use find-remove to clean stuff out every 30 minutes
     fs.mkdir(`uploads/dir${curr_id}`, {recursive: true}, (err)=>{
         // error if it already exists
         if(err){
             next(err);
+            return;
             
         }
         fs.copyFile(`uploads/${req.file.filename}`, `uploads/dir${curr_id}/${originalname_str}`, (err)=>{
             // overrides dest
             if(err){
                 next(err);
+                return;
                 
             }
             fs.unlink(`uploads/${req.file.filename}`, (err)=>{
                 if(err){
                     next(err);
+                    return;
                     
                 }
                 const data = {id: curr_id, name: originalname_str, op: req.body.operation, rad: req.body.radius};
@@ -87,6 +121,7 @@ app.post('/send', upload.single('image'), (req, res, next)=>{
                     console.log("error occured in worker");
                     console.log(err.message);
                     next(err);
+                    return;
                     //console.log(res.statusCode);
                     
                 });

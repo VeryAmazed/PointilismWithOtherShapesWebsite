@@ -28,7 +28,7 @@ struct pixel{
 int height;
 int width;
 int max_val;
-int user_rad_range;
+ll user_rad_range;
 string user_id;
 vector<pixel> vec;
 string fileName;
@@ -62,6 +62,9 @@ int main ( int argc, char *argv[] ){
 	// don't allow images with too many pixels, even if it's file size is under 4mb
 	if(width*height > 4000*4000){
 		cout << "w*h too big" << endl;
+		return 1;
+	}else if(user_rad_range != 0 && width*height/(4*(ll)pow(user_rad_range,2)) < 500){
+		cout << "radius too large" << endl;
 		return 1;
 	}
 	//cout << "got here1" << endl;
