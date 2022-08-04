@@ -9,18 +9,27 @@ const {Worker} = require('worker_threads');
 const app = express();
 const upload = multer({dest: 'uploads/'});
 const findRemoveSync = require('find-remove');
+const rateLimit = require('express-rate-limit');
+
+const sendLimiter = rateLimit({
+    windowMS: 15*60*1000,
+    max: 180,
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+
+});
 
 // setInterval takes a callback so we use .bind() to return a function while being able to give it the desired arguments
 setInterval(findRemoveSync.bind(this, path.join(__dirname, '/uploads'), {dir: '*', files: ['*.*', '*'], age: {seconds: 1800}}), 1800000);
 app.use(express.json());
-//app.use(bodyParser.json());
+
+// use rate limiter to stop ddos stuff
+app.use(express.static(path.join(__dirname, '/../Front')));
+app.use('/send', sendLimiter);
+
 let id = ['0'];
 const key = 'we1x*59';
 const valid_operations = ["pointilism", "rectanglism", "trianglism", "hexagonism"];
-
-// use rate limiter to stop ddos stuff
-
-app.use(express.static(path.join(__dirname, '/../Front')));
 
 app.get('/id', (req,res)=>{
     
