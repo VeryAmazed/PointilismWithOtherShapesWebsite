@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Apply Pointilism and other Operations to Image</title>
     <link href="style.css" rel="stylesheet">
     
@@ -10,31 +11,84 @@
     <h1>Title</h1>
     <main>
         <section>
-            <p >Some text explainig how it works</p>
-            <img src="images/trees.png" alt="Before Operation is Applied" id="before">
-            <img src="images/trees_pointilism.png" alt="After Pointilism Is Applied" id="after">
+          <h2>How to Use</h2>
+          <p>Stand in text. Explain we use convert, radius calcs</p>
         </section>
-    
-        <form action="/send" method="post" enctype="multipart/form-data">
-            <!--File upload -->>
-            <label for="image">Please an Image</label>
-            <input type="file" name="image" id="image" accept="image" required>
-            <!--Radio Buttons-->
-            <input type="radio" id="pointilism" name="operation" value="pointilism" required>
-            <label for="pointilism">Pointilism</label>
-            <input type="radio" id="rectanglism" name="operation" value="rectanglism">
-            <label for="rectanglism">Rectanglism</label>
-            <input type="radio" id="hexagonism" name="operation" value="hexagonism">
-            <label for="hexagonism">Hexagonism</label>
-            <input type="radio" id="trianglism" name="operation" value="trianglism">
-            <label for="trianglism">Trianglism</label>
-            <!--Optional Rad-->
-            <input type="number" name="radius" id="radius" value="0" min="0" max="16000000">
-            <label for="radius">Radius (optional)</label>
-            <button type="submit" id="send_img">
-                <strong>submit</strong>
-            </button>
-        </form>
+        <div class = "wrapper">
+          <div class = "examples">
+            <h2>Demo</h2>
+            <div class="ex_images">
+              <figure class="suicune">
+                <a href="https://twitter.com/kizakura184">
+                  <img src="images/Suicune.jpg" alt="A Picture of the Pokemon Suicune. Artist: @kizakura184, click on image to see his Twitter.">
+                </a>
+                <figcaption>A Picture of the Pokemon Suicune. Artist: @kizakura184, click on image to see his Twitter.</figcaption>
+              </figure>
+            </div>
+            <ul class="after_op">
+              <li>
+                <figure>
+                  <img src="images/hexagonism_Suicune.jpg" alt="Above image after hexagonism is applied">
+                  <figcaption>Above image after hexagonism is applied.</figcaption>
+                </figure>
+              </li>
+              <li>
+                <figure>
+                  <img src="images/pointilism_Suicune.jpg" alt="Above image after pointilism is applied">
+                  <figcaption>Above image after pointilism is applied.</figcaption>
+                </figure>
+              </li>
+              <li>
+                <figure>
+                  <img src="images/rectanglism_Suicune.jpg" alt="Above image after rectanglism is applied">
+                  <figcaption>Above image after rectanglism is applied.</figcaption>
+                </figure>
+              </li>
+              <li>
+                <figure>
+                  <img src="images/trianglism_Suicune.jpg" alt="Above image after trianglism is applied">
+                  <figcaption>Above image after trianglism is applied.</figcaption>
+                </figure>
+              </li>
+            </ul>
+          </div>
+          <div class = "im_upload">  
+            <div class = "u_im_box">
+              <img src="images/placeholder.png" alt="Your uploaded image/The image after the operation is applied" title="Your uploaded image/The image after the operation is applied" id="uploaded_image">
+            </div>          
+            <form action="/send" method="post" enctype="multipart/form-data">
+                <!--File upload -->>
+                <label for="image">Please Upload an Image</label>
+                <input type="file" name="image" id="image" accept="image" required>
+                <!--Radio Buttons-->
+                <ul class="rbuttons">
+                  <li>
+                    <input type="radio" id="pointilism" name="operation" value="pointilism" required>
+                    <label for="pointilism">Pointilism</label>
+                  </li>
+                  <li>
+                    <input type="radio" id="rectanglism" name="operation" value="rectanglism">
+                    <label for="rectanglism">Rectanglism</label>
+                  </li>
+                  <li>
+                    <input type="radio" id="hexagonism" name="operation" value="hexagonism">
+                    <label for="hexagonism">Hexagonism</label>
+                  </li>
+                  <li>
+                    <input type="radio" id="trianglism" name="operation" value="trianglism">
+                    <label for="trianglism">Trianglism</label>
+                  </li>
+                </ul>
+                
+                <!--Optional Rad-->
+                <input type="number" name="radius" id="radius" value="0" min="0" max="24000000">
+                <label for="radius">Radius (optional)</label>
+                <button type="submit" id="send_img">
+                    <strong>submit</strong>
+                </button>
+            </form>
+          </div>
+        </div>
     </main>
     <div id="waiting">
         <h1>Please Wait...</h1>

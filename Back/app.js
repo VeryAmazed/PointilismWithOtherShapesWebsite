@@ -65,7 +65,7 @@ app.post('/send', upload.single('image'), (req, res, next)=>{
         next(err);
         return;
         
-    }else if(req.file.size > 4194304){ // 4 * 2^20, 4mb
+    }else if(req.file.size > 8*Math.pow(2,20)){ // 4 * 2^20, 4mb
         const err = new Error("File size too large");
         next(err);
         return;
@@ -102,7 +102,7 @@ app.post('/send', upload.single('image'), (req, res, next)=>{
    
     
     // or don't delete and I'll use find-remove to clean stuff out every 30 minutes
-    fs.mkdir(`uploads/dir${curr_id}`, {recursive: true}, (err)=>{
+    fs.mkdir(`uploads/dir${curr_id}`, (err)=>{
         // error if it already exists
         if(err){
             next(err);

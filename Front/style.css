@@ -1,6 +1,64 @@
+body{
+    background-color: #fff;
+    color: #333;
+    margin: 0;
+    font: Arial, Helvetica, sans-serif;
+}
+img{
+    max-width: 100%;
+}
+figcaption{
+    text-align: center;
+}
 #waiting{
     visibility: hidden;
 }
 #error{
     visibility: hidden;
+}
+.examples{
+    border: 5px solid red;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+}
+.suicune{
+    margin-left: auto;
+    margin-right: auto;
+    object-fit: contain;
+}
+.after_op{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 2px;
+}
+.im_upload{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+}
+form {
+    width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 5px solid blue;
+}
+#uploaded_image{
+    display: block;
+    border: 5px solid blue;
+    margin-left: auto;
+    margin-right: auto;
+    object-fit: contain;
+}
+.rbuttons{
+    list-style-type: none;
+}
+@media screen and (min-width: 1200px) and (orientation: landscape) {
+    .wrapper{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
 }

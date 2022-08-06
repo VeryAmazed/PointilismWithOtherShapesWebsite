@@ -23,8 +23,8 @@ window.addEventListener('load', (e)=>{
 });
 
 inFile.addEventListener("change", (e)=>{
-    if(inFile.files[0].size > 4194304){
-        alert("File is too large. Max size is 4mb.");
+    if(inFile.files[0].size > 8 * Math.pow(2, 20)){
+        alert("File is too large. Max size is 8mb.");
         inFile.value = "";
     }
 });
@@ -73,10 +73,11 @@ form.addEventListener('submit', (e)=>{
         }
         
         img_url =  URL.createObjectURL(resp);
-        //console.log(img_url);
+        
         document.querySelector('main').style.visibility = "visible";
         document.querySelector("#waiting").style.visibility = "hidden";
-        document.querySelector("#after").src = img_url;
+        
+       document.querySelector("#uploaded_image").src = img_url;
     });
     
 });
