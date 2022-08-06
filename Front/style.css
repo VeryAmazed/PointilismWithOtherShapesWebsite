@@ -1,13 +1,16 @@
 html{
     font-size: 16px;
-    background-color: aliceblue;
+    background-color: rgb(182, 209, 233);
 }
 body{
     color: #333;
     margin: 0;
-    font: Arial, Helvetica, sans-serif;
+    font-family: 'Times New Roman', Times, serif;
 }
-h1{
+main{
+    visibility: visible;
+}
+main h1{
     font-size: 3rem;
     text-align: center;
 }
@@ -24,20 +27,14 @@ img{
 figcaption{
     text-align: center;
 }
-#waiting{
-    visibility: hidden;
-}
-#error{
-    visibility: hidden;
-}
 .wrapper{
-    background-color: rgb(127, 161, 192);
+    background-color:  #E5E4E2;
 }
 .examples{
-    
     display: grid;
     grid-template-columns: 1fr;
     grid-auto-rows: auto;
+    margin-left: 16px;
 }
 .examples h2{
     text-align: center;
@@ -47,7 +44,6 @@ figcaption{
 .suicune{
     margin-left: auto;
     margin-right: auto;
-    padding: 4px;
     object-fit: contain;
 }
 .after_op{
@@ -62,20 +58,20 @@ figcaption{
     margin: 0 0 12px 0;
     padding: 0;
 }
+.u_im_upload{
+    margin-right: 16px;
+}
 .u_im_box{
-    border: 4px solid green;
-    padding: 4px 12px 4px 4px;
-    
-    
+    padding: 12px 20px 12px 12px;
 }
 form {
-    background-color: #E5E4E2;
+    background-color: aliceblue;
     width: 420px;
     margin-top: 12px;
     margin-left: auto;
     margin-right: auto;
-    border: 5px solid blue;
-    padding: 4px;
+    border: 2px solid rgb(149, 149, 230);
+    padding: 8px;
 }
 form button{
     display: block;
@@ -84,7 +80,6 @@ form button{
 }
 #uploaded_image{
     display: block;
-    
     margin-left: auto;
     margin-right: auto;
     object-fit: contain;
@@ -92,6 +87,51 @@ form button{
 .rbuttons{
     list-style-type: none;
     
+}
+#waiting{
+    visibility: hidden;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 128px;
+}
+.loading-dots {
+    text-align: center;
+    z-index: 5;
+    font-size: 1.5rem;
+}
+.loading-dots h1{
+    display: inline;
+    bottom: 0px;
+}
+.dot {
+    display: inline;
+    margin-left: 0.2em;
+    margin-right: 0.2em;
+    position: relative;
+    bottom: 0px;
+    font-size: 3.5em;
+    opacity: 0;
+    animation: showHideDot 2.5s ease-in-out infinite;
+}
+
+.one { animation-delay: 0.2s; }
+.two { animation-delay: 0.4s; }
+.three { animation-delay: 0.6s; }
+
+@keyframes showHideDot {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    60% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  
+
+#error{
+    visibility: hidden;
+    position: fixed;
+    top: 16px;
+    left: 16px;
 }
 @media screen and (min-width: 1200px) and (orientation: landscape) {
     .wrapper{
