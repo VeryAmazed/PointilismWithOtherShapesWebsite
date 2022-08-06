@@ -57,7 +57,7 @@
               <img src="images/placeholder.png" alt="Your uploaded image/The image after the operation is applied" title="Your uploaded image/The image after the operation is applied" id="uploaded_image">
             </div>          
             <form action="/send" method="post" enctype="multipart/form-data">
-                <!--File upload -->>
+                <!--File upload -->
                 <label for="image">Please Upload an Image</label>
                 <input type="file" name="image" id="image" accept="image" required>
                 <!--Radio Buttons-->
@@ -82,7 +82,7 @@
                 
                 <!--Optional Rad-->
                 <input type="number" name="radius" id="radius" value="0" min="0" max="24000000">
-                <label for="radius">Radius (optional)</label>
+                <label for="radius">Radius <u>(0 = Default)</u></label>
                 <button type="submit" id="send_img">
                     <strong>submit</strong>
                 </button>
