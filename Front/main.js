@@ -6,22 +6,6 @@ const radio = document.getElementsByName("operation");
 let unique_id;
 let img_url = null;
 
-window.addEventListener('load', (e)=>{
-    
-    fetch('http://localhost:8080/id').then((resp) =>{
-        //console.log("resp?");
-        if(!resp.ok){
-            
-            throw new Error(`Http error! Status: ${resp.status}`);
-        }
-        return resp.json();
-    }).then(vals=>{
-        unique_id = vals.value;
-        console.log(unique_id);
-    });
-    
-});
-
 inFile.addEventListener("change", (e)=>{
     if(inFile.files[0].size > 8 * Math.pow(2, 20)){
         alert("File is too large. Max size is 8mb.");
@@ -43,13 +27,12 @@ form.addEventListener('submit', (e)=>{
     const formData = new FormData();
     formData.append("image", inFile.files[0]);
     formData.append("operation", result);
-    formData.append("u_id", unique_id);
     formData.append("radius", document.querySelector("#radius").value);
     fetch("http://localhost:8080/send", {
         method: "POST",
         body: formData,
     }).then((resp)=>{
-        //console.log("made it here1");
+        
         
         if(!resp.ok){
             if(resp.status === 429){
@@ -60,13 +43,12 @@ form.addEventListener('submit', (e)=>{
             throw new Error(`HTTP error! Status: ${ resp.status }`);
         }
         
-        //console.log(resp.blob());
+        
         return resp.blob();
     }).then(resp =>{
         console.log("made it here2");
         console.log(resp);
-        //console.log(img_url !== null);
-        //console.log(img_url);
+        
         if(img_url !== null){
             URL.revokeObjectURL(img_url);
             console.log(img_url);

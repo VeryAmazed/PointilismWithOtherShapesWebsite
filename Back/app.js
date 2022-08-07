@@ -3,8 +3,6 @@ const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
 const {Worker} = require('worker_threads');
-//const bodyParser = require('body-parser');
-
 
 const app = express();
 const upload = multer({dest: 'uploads/'});
@@ -28,11 +26,9 @@ app.use(express.static(path.join(__dirname, '/../Front')));
 app.use('/send', sendLimiter);
 
 let id = ['0'];
-const key = 'we1x*59';
 const valid_operations = ["pointilism", "rectanglism", "trianglism", "hexagonism"];
 
-app.get('/id', (req,res)=>{
-    
+function getNextId(){
     if(id[id.length-1] === '9'){
         id[id.length-1] = 'a';
     }else if(id[id.length-1] === 'z'){
@@ -40,15 +36,11 @@ app.get('/id', (req,res)=>{
     }else{
         id[id.length - 1] = String.fromCharCode(id[id.length-1].charCodeAt(0)+1);
     }
-    console.log(id);
-    
-    console.log((id.join('')+key));
-    res.send({value: (id.join('')+key)});
-});
-
+    return id.join('');
+}
 
 app.post('/send', upload.single('image'), (req, res, next)=>{
-    const curr_id = req.body.u_id;
+    const curr_id = getNextId();
     console.log(req.file, req.body);
     let isValidOp = false;
     for(let i = 0; i < valid_operations.length; i++){
@@ -59,13 +51,7 @@ app.post('/send', upload.single('image'), (req, res, next)=>{
 
     const parsed = parseInt(req.body.radius, 10);
     console.log(parsed);
-    //express error handling handles the case where any of these fields is undefined, including when the file is undefined
-    if(!curr_id.endsWith(key)){
-        const err = new Error("Invalid ID");
-        next(err);
-        return;
-        
-    }else if(req.file.size > 8*Math.pow(2,20)){ // 4 * 2^20, 4mb
+    if(req.file.size > 8*Math.pow(2,20)){ // 4 * 2^20, 4mb
         const err = new Error("File size too large");
         next(err);
         return;
