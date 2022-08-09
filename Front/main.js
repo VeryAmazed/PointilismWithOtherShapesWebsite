@@ -2,6 +2,7 @@ const form = document.querySelector('form');
 
 const inFile = document.querySelector('#image');
 const radio = document.getElementsByName("operation");
+const radSelector = document.querySelector('#radius');
 // form submits and then we hide main and make a fetch request
 let unique_id;
 let img_url = null;
@@ -12,6 +13,10 @@ inFile.addEventListener("change", (e)=>{
         inFile.value = "";
     }
 });
+
+inFile.addEventListener("click", (e)=>{
+    radSelector.value = "0";
+})
 
 form.addEventListener('submit', (e)=>{
    e.preventDefault();

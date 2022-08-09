@@ -3,6 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="This website allows users to upload an image and apply operations that apply a pointilism (circles) like effect, as well as other similar looking
+    operations that use other shapes such as triangles, rectangles, and hexagons instead of circles to that image, almost like a filter. Kind of like pixelation.">
     <title>Apply Pointilism and Other Similar Operations to Images</title>
     <link href="style.css" rel="stylesheet">
     
@@ -14,7 +16,34 @@
       </h1>
         <section>
           <h2>How to Use</h2>
-          <p>Stand in text. Explain we use convert, radius calcs</p>
+          <p>This website relies on the convert shell command of the ImageMagick software so any<a href="https://imagemagick.org/script/formats.php">image format</a>
+            it supports will work. ,radius calcs</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Operation</th>
+                <th>Default Radius Formula</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Pointilism</td>
+                <td>Cell 1</td>
+              </tr>
+              <tr>
+                <td>Rectanglism</td>
+                <td>Cell 2</td>
+              </tr>
+              <tr>
+                <td>Hexagonilism</td>
+                <td>Cell 3</td>
+              </tr>
+              <tr>
+                <td>Trianglism</td>
+                <td>Cell 4</td>
+              </tr>
+            </tbody>
+          </table>
         </section>
         <div class = "wrapper">
           <div class = "examples">
@@ -82,7 +111,7 @@
                   </li>
                 </ul>
                 
-                <!--Optional Rad-->
+                <!--Optional Radius-->
                 <input type="number" name="radius" id="radius" value="0" min="0" max="24000000">
                 <label for="radius">Radius <u>(0 = Default)</u></label>
                 <button type="submit" id="send_img">
