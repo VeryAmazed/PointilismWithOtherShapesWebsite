@@ -1,8 +1,7 @@
 FROM node:14
-WORKDIR /all
+WORKDIR /app
 COPY package*.json ./
 RUN npm install
-
 COPY . .
 RUN g++ -std=c++17 -o ./manip.out ./manip.cpp
 EXPOSE 8080
