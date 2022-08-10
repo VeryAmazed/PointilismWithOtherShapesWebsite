@@ -1,4 +1,4 @@
 # Pointilism
 Website that allows you to ism-ify your images.
 
-Add some stuff to test git
+This is now the private version of the repo. I do all work and adjustments here and only update the public version of this repo when I feel satisfied with changes made.
