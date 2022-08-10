@@ -29,7 +29,7 @@ app.use(express.static(path.join(__dirname, '/Front')));
 app.use('/send', sendLimiter);
 // each post requests gets its own unique id
 let id = ['0'];
-const valid_operations = ["pointilism", "rectanglism", "trianglism", "hexagonism"];
+const valid_operations = ["pointillism", "rectanglism", "trianglism", "hexagonism"];
 // helper function that generates the next unique id
 function getNextId(){
     if(id[id.length-1] === '9'){

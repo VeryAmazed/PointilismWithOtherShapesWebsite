@@ -125,7 +125,7 @@ void modify(){
 	// maximum possible radius, minimum is 1
 	int rad_range;
 	if(user_rad_range <= 0){
-		if(operation == "pointilism"){
+		if(operation == "pointillism"){
 			rad_range = ceil(sqrt((double)min(width, height)/(double)600) * 5);
 		}else if(operation == "rectanglism"){
 			rad_range = ceil(sqrt((double)min(width, height)/(double)600) * 5);
@@ -143,7 +143,7 @@ void modify(){
 		int row = rand()%height;
 		int r = rand()%rad_range + 1;
 		
-		if(operation == "pointilism"){
+		if(operation == "pointillism"){
 			circle(row, col, r);
 		}else if(operation == "rectanglism"){
 			rectangle(row, col, r);
