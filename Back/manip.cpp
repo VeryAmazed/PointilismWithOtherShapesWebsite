@@ -25,6 +25,7 @@ struct pixel{
 	unsigned char r, g, b;
 };
 
+// global variables ok here because everything is done in this file (it's a small program)
 int height;
 int width;
 int max_val;
@@ -45,33 +46,24 @@ void hexagon(int row, int col, int r);
 int main ( int argc, char *argv[] ){
 	cout << "hello stdout" << endl;
 	fileName = argv[1];
-	//cout << "got here 1?" <<endl;
 	operation = argv[2];
-	
-	// sanity check user_rad_range to be an int, but also to not be too large
 	user_rad_range = stoi(argv[3], nullptr);
 	user_id = argv[4];
-	//cout << "do it get here, read all vars?" << endl;
-	
 	if(readFile()){
 		cout << "readFile 1 " << endl;
 		return 1;
 	}
-	
-	
-	// don't allow images with too many pixels, even if it's file size is under 4mb
+
+	// don't allow images with too many pixels, even if it's file size is under 8mb
 	if(width*height > 4000*6000){
-		cout << "w*h too big" << endl;
-		return 1;
-	}else if(user_rad_range != 0 && width*height/(4*(ll)pow(user_rad_range,2)) < 500){
-		cout << "radius too large" << endl;
 		return 1;
 	}
-	//cout << "got here1" << endl;
+	// don't allow user to enter a radius that is too large
+	else if(user_rad_range != 0 && width*height/(4*(ll)pow(user_rad_range,2)) < 300){
+		return 1;
+	}
 	modify();
-	//cout << "got here2" << endl;
 	if(writeFile()){
-		cout << "writeFile 1" << endl;
 		return 1;
 	}
 	cout << "sucess 0 "<< endl;
@@ -113,6 +105,7 @@ int readFile(){
 }
 
 int writeFile(){
+	// write the file to this directory with the filename being after_{operation name}.ppm
 	string outFileName = "./uploads/dir" + user_id + "/after_" + operation +".ppm";
 	cout << outFileName << endl;
 	ofstream out(outFileName, ios::binary);
@@ -129,7 +122,7 @@ int writeFile(){
 }
 
 void modify(){
-	// maimum possible radius, minimum is 1
+	// maximum possible radius, minimum is 1
 	int rad_range;
 	if(user_rad_range <= 0){
 		if(operation == "pointilism"){
@@ -145,6 +138,7 @@ void modify(){
 		rad_range = user_rad_range;
 	}
 	for(int i = 0; i < (ll)(width*height*0.03); i++){
+		// choose a random pixel
 		int col = rand()%width;
 		int row = rand()%height;
 		int r = rand()%rad_range + 1;
@@ -183,7 +177,6 @@ void rectangle(int row, int col, int r){
 			vec[i*width+j].r = vec[row*width + col].r;
 			vec[i*width+j].g = vec[row*width + col].g;
 			vec[i*width+j].b = vec[row*width + col].b;
-			
 		}
    }
 }
@@ -234,11 +227,9 @@ void hexagon(int row, int col, int r){
    // create the rectangle body
    for(int i = (row-r + triHeight<0?0:row-r+triHeight); i < (row+r+1-triHeight > height?height:row+r+1-triHeight); i++){ // makes sure the random row exists, aka not negative and not greater than the number of rows in the ppm
 		for(int j = (col-r<0?0:col-r); j < (col+r+1 > width?width:col+r+1); j++){ // same as above except for columns
-			
 			vec[i*width+j].r = vec[row*width + col].r;
 			vec[i*width+j].g = vec[row*width + col].g;
 			vec[i*width+j].b = vec[row*width + col].b;
-			
 		}
    }
    // create the bottom triangle
@@ -249,11 +240,9 @@ void hexagon(int row, int col, int r){
 		}
 		sub += incPerLayer;
 		for(int j = (col-r+sub<0?0:col-r+sub); j < (col+r+1-sub > width?width:col+r+1-sub); j++){ // same as above except for columns
-			
 			vec[i*width+j].r = vec[row*width + col].r;
 			vec[i*width+j].g = vec[row*width + col].g;
 			vec[i*width+j].b = vec[row*width + col].b;
-			
 		}
    }
 }

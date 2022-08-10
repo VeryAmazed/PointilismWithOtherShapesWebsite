@@ -7,7 +7,8 @@
     operations that use other shapes such as triangles, rectangles, and hexagons instead of circles to that image, almost like a filter. Kind of like pixelation.">
     <title>Apply Pointilism and Other Similar Operations to Images</title>
     <link href="style.css" rel="stylesheet">
-    
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   </head>
   <body>
     <main>
@@ -16,8 +17,16 @@
       </h1>
         <section>
           <h2>How to Use</h2>
-          <p>This website relies on the convert shell command of the ImageMagick software so any<a href="https://imagemagick.org/script/formats.php">image format</a>
-            it supports will work. ,radius calcs</p>
+          <p>
+            This website relies on the convert shell command of the ImageMagick software to convert the uploaded file to a ppm so 
+            any <a href="https://imagemagick.org/script/formats.php">image format</a> it supports will work.<br>
+            The radius field in the form below is used to 
+            determine the size of the shapes used to recreate the image. How the reconstruction is performed is by repeatedly randomly selecting a pixel as well as
+            a value x in the range from 1 to radius inclusive and then constructing a 2x+1 px by 2x+1 px square around the chosen pixel within which
+            the shape used to make up the image is constructed. A default radius, represented by the number 0 in the form, is used if no value is entered 
+            into the radius field. <br>
+            Below is a table of how default radiuses are calculated.
+          </p>
           <table>
             <thead>
               <tr>
@@ -28,22 +37,28 @@
             <tbody>
               <tr>
                 <td>Pointilism</td>
-                <td>Cell 1</td>
+                <td>\(ceil(\frac{\sqrt{(min(width, height))}*5}{600})\)</td>
               </tr>
               <tr>
                 <td>Rectanglism</td>
-                <td>Cell 2</td>
+                <td>\(ceil(\frac{\sqrt{(min(width, height))}*5}{600})\)</td>
               </tr>
               <tr>
                 <td>Hexagonilism</td>
-                <td>Cell 3</td>
+                <td>\(ceil(\frac{\sqrt{(min(width, height))}*5}{525})\)</td>
               </tr>
               <tr>
                 <td>Trianglism</td>
-                <td>Cell 4</td>
+                <td>\(ceil(\frac{\sqrt{(min(width, height))}*5}{400})\)</td>
               </tr>
             </tbody>
           </table>
+          <p>
+            Additionally, you may not enter a radius such that this expression, 
+            \(\frac{width*height}{4*radius^2} < 300 \), is true as the server will fail your request. Basically, don't make the radius too large. <br>
+            Furthermore, the server will also fail requests involving images with more than \(2.4*10^7\) pixels.<br>
+            Note: Larger images and larger radius values take exponentially longer to process.
+          </p>
         </section>
         <div class = "wrapper">
           <div class = "examples">
@@ -112,7 +127,7 @@
                 </ul>
                 
                 <!--Optional Radius-->
-                <input type="number" name="radius" id="radius" value="0" min="0" max="24000000">
+                <input type="number" name="radius" id="radius" value="0" min="0" max="141">
                 <label for="radius">Radius <u>(0 = Default)</u></label>
                 <button type="submit" id="send_img">
                     <strong>submit</strong>
