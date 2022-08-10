@@ -19,7 +19,8 @@
           <h2>How to Use</h2>
           <p>
             This website relies on the convert shell command of the ImageMagick software to convert the uploaded file to a ppm so 
-            any <a href="https://imagemagick.org/script/formats.php">image format</a> it supports will work.<br>
+            any <a href="https://imagemagick.org/script/formats.php">image format</a> it supports will work. However, the image returned is in the same format
+            as the image uploaded, so it is possible that the browser will be unable to open the image.<br>
             The radius field in the form below is used to 
             determine the size of the shapes used to recreate the image. How the reconstruction is performed is by repeatedly randomly selecting a pixel as well as
             a value x in the range from 1 to radius inclusive and then constructing a 2x+1 px by 2x+1 px square around the chosen pixel within which
