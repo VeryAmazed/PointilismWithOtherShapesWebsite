@@ -25,3 +25,5 @@ or you can run it on your own computer (only works on linux):
 - compile the manip.cpp into a file called manip.out, you can use: g++ -std=c++17 -o ./manip.out ./manip.cpp
 - to run the server, node app.js
 - enter, http://localhost:8080/, into your browser
+
+Note: The server uses multithreading so if you want to process multiple images at once, just open up multiple browser tabs. Also it has a rate limiter (180 uploads per 15 minutes per ip). To remove the rate limiter delete this line of code, app.use('/send', sendLimiter);, on line 29 in app.js. You will have to build a new docker image though. 
