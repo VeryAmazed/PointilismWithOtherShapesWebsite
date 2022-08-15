@@ -30,6 +30,26 @@ app.use('/send', sendLimiter);
 // each post requests gets its own unique id
 let id = ['0'];
 const valid_operations = ["pointillism", "rectanglism", "trianglism", "hexagonism"];
+
+// Basically any ascii value that doesn't represent an alpha-numerical character or isn't _, -, or . gets replaced for command line reasons
+const badCharacters = new Set();
+function addBadCharacters(){
+    for(i =0; i <= 44; i++){
+        badCharacters.add(i);
+    }
+    badCharacters.add(47);
+    for(i =58; i <= 64; i++){
+        badCharacters.add(i);
+    }
+    for(i =91; i <= 96; i++){
+        badCharacters.add(i);
+    }
+    for(i =123; i <= 127; i++){
+        badCharacters.add(i);
+    }
+}
+addBadCharacters();
+
 // helper function that generates the next unique id
 function getNextId(){
     if(id[id.length-1] === '9'){
@@ -77,7 +97,7 @@ app.post('/send', upload.single('image'), (req, res, next)=>{
     // handle filenames with spaces in them
     let originalname = [];
     for(let i = 0; i < req.file.originalname.length; i++){
-        if(req.file.originalname.charCodeAt(i) === 32){
+        if(badCharacters.has(req.file.originalname.charCodeAt(i))){
             originalname.push('_');
         }else{
             originalname.push((req.file.originalname)[i]);
