@@ -6,7 +6,7 @@ Small Project I made to learn about Frontend and Backend Programming. Uses HTML,
 How to Use:
 
 Pull the docker image from DockerHub https://hub.docker.com/repository/docker/veryamazed/pointillism/tags?page=1&ordering=last_updated
-- docker run --publish 8080:8080 veryamazed/pointillism:latest
+- docker run --publish 8080:8080 veryamazed/pointillism:1.1
 - enter, http://localhost:8080/, into your browser
 
 Copy over the entire repository. The directory structure is very important.
