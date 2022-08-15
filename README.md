@@ -4,6 +4,11 @@ This is the public fork of this repository. All the commits and changes I keep o
 Small Project I made to learn about Frontend and Backend Programming. Uses HTML, CSS, JS, Node.js, C++. Website takes an image uploaded by the user and returns a reconstruction of that image out of a shape of the user's choosing giving it a pointillism like effect. Idea/how to recreate an image out of circles to look like pointillism was inspired by a project I did in a university CS course. 
 
 How to Use:
+
+Pull the docker image from DockerHub https://hub.docker.com/repository/docker/veryamazed/pointillism/tags?page=1&ordering=last_updated
+- docker run --publish 8080:8080 veryamazed/pointillism:latest
+- enter, http://localhost:8080/, into your browser
+
 Copy over the entire repository. The directory structure is very important.
 You can either build the docker file:
 - install docker
@@ -19,3 +24,6 @@ or you can run it on your own computer (only works on linux):
 - run, npm install
 - compile the manip.cpp into a file called manip.out, you can use: g++ -std=c++17 -o ./manip.out ./manip.cpp
 - to run the server, node app.js
+- enter, http://localhost:8080/, into your browser
+
+Note: The server uses multithreading so if you want to process multiple images at once, just open up multiple browser tabs. Also it has a rate limiter (180 uploads per 15 minutes per ip). To remove the rate limiter delete this line of code, app.use('/send', sendLimiter);, on line 29 in app.js. You will have to build a new docker image though. 
